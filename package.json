@@ -1,8 +1,9 @@
 {
-  "name": "@terascope/fetch-github-release",
+  "name": "fetch-github-release",
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "version": "0.7.7",
   "description": "Download a specific release from github",
   "main": "src/index.js",
@@ -24,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/terascope/fetch-github-release.git"
+    "url": "https://github.com/tymphillips/fetch-github-release.git"
   },
   "keywords": [
     "github",
@@ -34,7 +35,7 @@
   "author": "Stephan Florquin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/terascope/fetch-github-release/issues"
+    "url": "https://github.com/tymphillips/fetch-github-release/issues"
   },
   "dependencies": {
     "commander": "^7.0.0",
