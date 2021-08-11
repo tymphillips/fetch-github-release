@@ -1,4 +1,4 @@
-export default function rpad(text, len) {
+module.exports = function rpad(text, len) {
   let t = text;
 
   if (t.length > len) {

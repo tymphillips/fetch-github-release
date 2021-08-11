@@ -8,7 +8,7 @@ export const releasesJson = JSON.parse(
 export const fileTxt = fs.readFileSync(path.resolve(__dirname, '../fixtures/file.txt'), 'utf8');
 export const fileZip = fs.readFileSync(path.resolve(__dirname, '../fixtures/file.zip'));
 
-export default function nockServer() {
+module.exports = function nockServer() {
   nock('https://api.github.com')
     .get('/repos/me/test/releases')
     .reply(200, releasesJson, { 'Content-Type': 'application/json' })
