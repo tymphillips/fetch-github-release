@@ -73,4 +73,4 @@ async function downloadRelease(
   return Promise.all(promises);
 }
 
-export default downloadRelease;
+module.exports = downloadRelease;
