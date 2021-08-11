@@ -44,7 +44,8 @@
     "got": "^11.4.0",
     "multi-progress": "^4.0.0",
     "progress": "^2.0.3",
-    "regenerator-runtime": "^0.13.5"
+    "regenerator-runtime": "^0.13.5",
+    "superagent": "^3.8.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
