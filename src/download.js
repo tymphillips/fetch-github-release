@@ -19,7 +19,7 @@ function getRequestOptions(urlString, token) {
   return Object.assign({}, url, { headers });
 }
 
-modules.exports = function download(url, token, w, progress = () => {}) {
+module.exports = function download(url, token, w, progress = () => {}) {
   return new Promise((resolve, reject) => {
     let protocol = /^https:/.exec(url) ? https : http;
     const options = getRequestOptions(url, token);
