@@ -60,13 +60,13 @@ async function downloadRelease(
     if (!fs.existsSync(destf)) {
       const dest = fs.createWriteStream(destf);
 
-      await download(asset.url, token, dest, progress);
-      if (!leaveZipped && /\.zip$/.exec(destf)) {
-        await extract(destf, {
-          dir: outputDir
+      return download(asset.url, token, dest, progress)
+        .then(() => {
+          if (!leaveZipped && /\.zip$/.exec(destf)) {
+            return extract(destf, outputdir).then(() => fs.unlinkSync(destf));
+          }
+          return destf;
         });
-        fs.unlinkSync(destf);
-      }
     }
     return destf;
   });

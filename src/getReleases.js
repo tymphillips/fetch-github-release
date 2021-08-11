@@ -4,17 +4,19 @@ const name = 'fetch-github-release';
 module.exports = function getReleases(user, token, repo) {
   const url = `https://api.github.com/repos/${user}/${repo}/releases`;
 
-  const requestConfig = {
-    headers: {
-      'User-Agent': name
-    },
-    responseType: 'json'
-  };
+  return new Promise((resolve, reject) => {
+    const r = request.get(url);
+    r.set('User-Agent', name);
+    if (token) {
+      r.set('Authorization', `token ${token}`);
+    }
+    r.end((err, res) => {
+      if (err) {
+        reject(err);
+        return;
+      }
 
-  if (token) {
-    requestConfig.headers.Authorization = `token ${token}`;
-  }
-
-  const r = await got.get(url, requestConfig);
-  return r.body;
+      resolve(res.body);
+    });
+  });
 }
