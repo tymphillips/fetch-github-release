@@ -16,6 +16,7 @@ const MultiProgress = require('multi-progress');
 async function downloadRelease(
   user,
   repo,
+  token,
   _outputDir,
   filterRelease = pass,
   filterAsset = pass,
@@ -24,7 +25,7 @@ async function downloadRelease(
 ) {
   const bars = new MultiProgress(process.stderr);
 
-  const releases = await getReleases(user, repo);
+  const releases = await getReleases(user, token, repo);
   const release = getLatest(releases, filterRelease, filterAsset);
   if (!release) {
     throw new Error(
@@ -60,7 +61,7 @@ async function downloadRelease(
     if (!fs.existsSync(destf)) {
       const dest = fs.createWriteStream(destf);
 
-      await download(asset.url, dest, progress);
+      await download(asset.url, token, dest, progress);
       if (!leaveZipped && /\.zip$/.exec(destf)) {
         await extract(destf, {
           dir: outputDir

@@ -3,26 +3,24 @@ import https from 'https';
 import URL from 'url';
 import { name } from '../package.json';
 
-const { GITHUB_TOKEN } = process.env;
-
-function getRequestOptions(urlString) {
+function getRequestOptions(urlString, token) {
   const url = URL.parse(urlString);
   const headers = {
     Accept: 'application/octet-stream',
     'User-Agent': name,
   };
 
-  if (GITHUB_TOKEN) {
-    headers.Authorization = `token ${GITHUB_TOKEN}`;
+  if (token) {
+    headers.Authorization = `token ${token}`;
   }
 
   return Object.assign({}, url, { headers });
 }
 
-export default function download(url, w, progress = () => {}) {
+export default function download(url, token, w, progress = () => {}) {
   return new Promise((resolve, reject) => {
     let protocol = /^https:/.exec(url) ? https : http;
-    const options = getRequestOptions(url);
+    const options = getRequestOptions(url, token);
 
     progress(0);
 
