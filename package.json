@@ -5,7 +5,7 @@
   },
   "version": "0.7.7",
   "description": "Download a specific release from github",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "typings": "index.d.ts",
   "scripts": {
     "test": "mocha --require @babel/polyfill --require @babel/register --require should --recursive",
