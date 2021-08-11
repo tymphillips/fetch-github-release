@@ -1,7 +1,9 @@
-import http from 'http';
-import https from 'https';
-import URL from 'url';
-import { name } from '../package.json';
+const http = require('http');
+const https = require('https');
+const URL = require('url');
+
+const name = 'fetch-github-release';
+
 
 function getRequestOptions(urlString, token) {
   const url = URL.parse(urlString);
