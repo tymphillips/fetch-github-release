@@ -1,5 +1,5 @@
-import got from 'got';
-import { name } from '../package.json';
+const request = require('superagent');
+const name = 'fetch-github-release';
 
 export default async function getReleases(user, token, repo) {
   const url = `https://api.github.com/repos/${user}/${repo}/releases`;

@@ -1,3 +1,3 @@
-import downloadRelease from './downloadRelease';
+const downloadRelease = require('./downloadRelease');
 
 module.exports = downloadRelease;

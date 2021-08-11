@@ -1,11 +1,12 @@
-import os from 'os';
-import fs from 'fs';
-import path from 'path';
-import extract from 'extract-zip';
-import getReleases from './getReleases';
-import getLatest from './getLatest';
-import download from './download';
-import rpad from './rpad';
+const os = require('os');
+const fs = require('fs');
+const path = require('path');
+const MultiProgress = require('multi-progress');
+const getReleases = require('./getReleases');
+const getLatest = require('./getLatest');
+const download = require('./download');
+const extract = require('./extract');
+const rpad = require('./rpad');
 
 function pass() {
   return true;
