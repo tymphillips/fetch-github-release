@@ -12,8 +12,6 @@ function pass() {
   return true;
 }
 
-const MultiProgress = require('multi-progress');
-
 async function downloadRelease(
   user,
   repo,
