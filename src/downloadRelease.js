@@ -16,7 +16,7 @@ async function downloadRelease(
   user,
   repo,
   token,
-  _outputDir,
+  outputdir,
   filterRelease = pass,
   filterAsset = pass,
   leaveZipped = false,
@@ -24,53 +24,49 @@ async function downloadRelease(
 ) {
   const bars = new MultiProgress(process.stderr);
 
-  const releases = await getReleases(user, token, repo);
-  const release = getLatest(releases, filterRelease, filterAsset);
-  if (!release) {
-    throw new Error(
-      `Could not find a release for ${user}/${repo} (${os.platform()} ${os.arch()})`
-    );
-  }
-  if (!disableLogging) {
-    console.error(`Downloading ${user}/${repo}@${release.tag_name}...`);
-  }
-  const promises = release.assets.map(async (asset) => {
-    let progress;
+  return getReleases(user, token, repo)
+    .then(releases => getLatest(releases, filterRelease, filterAsset))
+    .then((release) => {
+      if (!release) {
+        throw new Error(
+          `could not find a release for ${user}/${repo} (${os.platform()} ${os.arch()})`
+        );
+      }
 
-    if (process.stdout.isTTY && !disableLogging) {
-      const bar = bars.newBar(`${rpad(asset.name, 24)} :bar :etas`, {
-        complete: '▇',
-        incomplete: '-',
-        width: process.stdout.columns - 36,
-        total: 100
+      if (!disableLogging) {
+        console.log(`Downloading ${user}/${repo}@${release.tag_name}...`);
+      }
+
+      const promises = release.assets.map((asset) => {
+        let progress;
+
+        if (process.stdout.isTTY && !disableLogging) {
+          const bar = bars.newBar(`${rpad(asset.name, 24)} :bar :etas`, {
+            complete: '▇',
+            incomplete: '-',
+            width: process.stdout.columns - 36,
+            total: 100
+          });
+          progress = bar.update.bind(bar);
+        }
+
+        const destf = path.join(outputdir, asset.name);
+        if (!fs.existsSync(destf)) {
+          const dest = fs.createWriteStream(destf);
+
+          return download(asset.url, token, dest, progress)
+            .then(() => {
+              if (!leaveZipped && /\.zip$/.exec(destf)) {
+                return extract(destf, outputdir).then(() => fs.unlinkSync(destf));
+              }
+              return destf;
+            });
+        }
+        return destf;
       });
-      progress = bar.update.bind(bar);
-    }
 
-    const outputDir = path.isAbsolute(_outputDir) ? _outputDir : path.resolve(_outputDir);
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir);
-    }
-
-    if (!fs.statSync(outputDir).isDirectory()) {
-      throw new Error(`Output path "${outputDir}" must be a directory`);
-    }
-
-    const destf = path.join(outputDir, asset.name);
-    if (!fs.existsSync(destf)) {
-      const dest = fs.createWriteStream(destf);
-
-      return download(asset.url, token, dest, progress)
-        .then(() => {
-          if (!leaveZipped && /\.zip$/.exec(destf)) {
-            return extract(destf, outputdir).then(() => fs.unlinkSync(destf));
-          }
-          return destf;
-        });
-    }
-    return destf;
-  });
-  return Promise.all(promises);
+      return Promise.all(promises);
+    });
 }
 
 module.exports = downloadRelease;
